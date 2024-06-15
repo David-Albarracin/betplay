@@ -11,12 +11,12 @@ import java.util.List;
 
 import com.campuslands.server.core.contracts.Repository;
 
-public abstract class MySQLRepository<T, ID> implements Repository<T, ID> {
+public abstract class MySQLAdapter<T, ID> implements Repository<T, ID> {
     protected final String url;
     protected final String username;
     protected final String password;
 
-    public MySQLRepository(String url, String username, String password) {
+    public MySQLAdapter(String url, String username, String password) {
         this.url = url;
         this.username = username;
         this.password = password;
