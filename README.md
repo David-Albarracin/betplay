@@ -28,8 +28,8 @@ TENIENDO EN CUENTA LA SIGUIENTE INFORMACION:
   ### REQUERIMIENTOS:
 
   1. EL PROGRAMA DEBE PERMITIR REGISTRAR CADA UNO DE LOS EQUIPOS QUE VAN A
-    PARTICIPAR EN EL TORNEO, TENGA EN CUENTA QUE AL MOMENTO DE REGISTRAR CADA
-    EQUIPO LAS VARIABLES DE PJ,PG,PP,PE,GF,GC,TP DEBEN SER 0
+      PARTICIPAR EN EL TORNEO, TENGA EN CUENTA QUE AL MOMENTO DE REGISTRAR CADA
+      EQUIPO LAS VARIABLES DE PJ,PG,PP,PE,GF,GC,TP DEBEN SER 0
 
     
 
@@ -58,4 +58,51 @@ TENIENDO EN CUENTA LA SIGUIENTE INFORMACION:
 
 ## Solución
 
-Vamos a implementar una arquitectura hexagonal + vertical slicing y vamos a crear una implementacion tanto para MySql como JSON, primero creamos el diagrama 
+Vamos a implementar una arquitectura hexagonal + vertical slicing y vamos a crear una implementación tanto para MySql como JSON, primero creamos la estructura de carpetas
+
+````
+├───java
+│   └───com
+│       └───campuslands
+│           ├───screen
+│           │   ├───application
+│           │   ├───domain
+│           │   └───infrastructure
+│           └───server
+│               ├───core
+│               │   ├───contracts
+│               │   └───helpers
+│               └───modules
+│                   ├───gjson
+│                   │   ├───application
+│                   │   ├───domain
+│                   │   └───infrastructure
+│                   ├───match
+│                   │   ├───application
+│                   │   ├───domain
+│                   │   │   ├───models
+│                   │   │   └───repository
+│                   │   └───infrastructure
+│                   ├───mysql
+│                   │   ├───application
+│                   │   ├───domain
+│                   │   └───infrastructure
+│                   ├───person
+│                   │   ├───application
+│                   │   ├───domain
+│                   │   │   ├───model
+│                   │   │   └───repository
+│                   │   └───infrastructure
+│                   └───team
+│                       ├───application
+│                       ├───domain
+│                       │   ├───models
+│                       │   └───repository
+│                       └───infrastructure
+└───resources
+    ├───datajson
+    └───images
+````
+
+La estructura la creamos usando el modelo hexagonal mas clean code luego de esto creamos el diagrama de entidades 
+
