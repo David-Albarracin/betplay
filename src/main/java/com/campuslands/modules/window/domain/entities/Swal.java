@@ -42,8 +42,8 @@ public class Swal {
         dialog.add(buttons, BorderLayout.SOUTH);
     }
 
-    public void setBodySwal(View view) {
-        dialog.add(view.getDiv(), BorderLayout.CENTER);
+    public void setBodySwal(JPanel body) {
+        dialog.add(body, BorderLayout.CENTER);
     }
 
     public void setAddButton(JButton addButton) {

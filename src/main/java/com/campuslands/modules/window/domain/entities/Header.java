@@ -7,44 +7,42 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import com.campuslands.modules.team.domain.models.Team;
-import com.campuslands.modules.team.infrastructure.MySQLTeamAdapter;
 
 
 public class Header {
 
     private static Header instance;
     public JMenuBar mb;
-  
+    public JMenu home;
+    public JMenu teams;
+    public JMenu match;
+    public JMenu person;
+    public JMenu reportTeams;
+    public JMenu reportPersons;
 
     public Header(){
         //header options
         mb = new JMenuBar();
-        JMenu option = new JMenu("inicio");
+        home = new JMenu("inicio");
+        teams = new JMenu("equipos");
+        match = new JMenu("partidos");
+        person = new JMenu("jugadores");
+        reportTeams = new JMenu("reporte equipos");
+        reportPersons = new JMenu("reporte personas");
 
-        option.add(new JMenuItem(new AbstractAction("Salir") {
+        home.add(new JMenuItem(new AbstractAction("Salir") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainFrame.getInstance().close();
             }
         }));
 
-        mb.add(option);
-
-        option = new JMenu("Equipos");
-
-        option.add(new JMenuItem(new AbstractAction("Nuevo Equipo") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MySQLTeamAdapter mySQLTeamAdapter = new MySQLTeamAdapter();
-                mySQLTeamAdapter.save(new Team("Bucaramanga"));
-                Swal swal = Swal.getInstance("Nuevo Equipo");
-                // swal.setBodySwal(viewTeam);
-                // swal.setAddButton(viewTeam.getAddButton());
-                swal.fire();
-            }
-        }));
-        mb.add(option);
+        mb.add(home);
+        mb.add(teams);
+        mb.add(match);
+        mb.add(person);
+        mb.add(reportTeams);
+        mb.add(reportPersons);
     }
 
 
@@ -60,13 +58,6 @@ public class Header {
         }
         return instance;
     }
-
-
-
-    public void addOption(JMenu option) {
-        mb.add(option);
-    }
-
 
 
 }
