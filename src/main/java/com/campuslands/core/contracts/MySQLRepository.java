@@ -77,4 +77,6 @@ public abstract class MySQLRepository<T, ID> implements Repository<T, ID> {
     public void delete(ID id) {
 
     }
+
+    
 }
