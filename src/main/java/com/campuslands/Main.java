@@ -8,7 +8,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-
+import com.campuslands.modules.match.infrastructure.in.MatchView;
 import com.campuslands.modules.team.infrastructure.in.TableTeam;
 import com.campuslands.modules.team.infrastructure.in.ViewTeam;
 import com.campuslands.modules.team.infrastructure.out.MySQLTeamAdapter;
@@ -114,8 +114,8 @@ public class Main implements Runnable  {
         option.add(new JMenuItem(new AbstractAction("Nuevo Partido") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ViewTeam viewTeam = new ViewTeam(backButton());
-                Main.reload(viewTeam.getContainer());
+                MatchView matchView = new MatchView(backButton());
+                Main.reload(matchView.getContainer());
             }
         }));
 

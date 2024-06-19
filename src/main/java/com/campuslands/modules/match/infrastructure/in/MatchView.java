@@ -1,22 +1,20 @@
 package com.campuslands.modules.match.infrastructure.in;
 
-
-
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+
+
+import com.campuslands.core.components.Input;
+import com.campuslands.core.components.InputTime;
+import com.campuslands.core.components.Select;
+import com.campuslands.core.helpers.HandleErrors;
+import com.campuslands.modules.match.application.ServiceMatch;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import com.campuslands.Main;
-import com.campuslands.core.helpers.HandleErrors;
-import com.campuslands.modules.team.domain.models.Team;
-import com.campuslands.modules.team.infrastructure.out.MySQLTeamAdapter;
 
 public class MatchView {
 
@@ -26,23 +24,25 @@ public class MatchView {
     JButton backButton;
     JButton addButton;
 
-    JTextField inputName;
-    JTextField inputStadium;
+    Select localTeamSelect;
+    Select visitorTeamSelect;
 
-    public MatchView(JButton buttonBack){
+    InputTime match_date;
+    InputTime match_time;
 
+    Input stadium;
+
+    public MatchView(JButton buttonBack) {
         container = new JPanel(new BorderLayout());
         bodyContainer = new JPanel(new GridLayout(0, 1));
 
-        inputName = new JTextField(30);
-        JPanel input_container_name = new JPanel(new FlowLayout());
-        input_container_name.add(new JLabel("Nombre del Equipo"));
-        input_container_name.add(inputName);
 
-        inputStadium = new JTextField(30);
-        JPanel input_container_stadium = new JPanel(new FlowLayout());
-        input_container_stadium.add(new JLabel("Nombre del Estadio"));
-        input_container_stadium.add(inputStadium);
+        localTeamSelect = new Select("Equipo Local", new ServiceMatch().findAllTeamOptions());
+        visitorTeamSelect = new Select("Equipo Visitante", new ServiceMatch().findAllTeamOptions());
+        match_date = new InputTime("Fecha del Partido", "date");
+        match_time = new InputTime("Hora del Partido", "time");
+
+        stadium = new Input("Estadio", 30);
 
         buttons = new JPanel(new FlowLayout());
         addButton = addButton();
@@ -50,48 +50,36 @@ public class MatchView {
         buttons.add(backButton);
         buttons.add(addButton);
 
-
-        bodyContainer.add(input_container_name);
-        bodyContainer.add(input_container_stadium);
+        bodyContainer.add(localTeamSelect.getSelect());
+        bodyContainer.add(visitorTeamSelect.getSelect());
+        bodyContainer.add(match_date.getDatePanel());
+        bodyContainer.add(match_time.getDatePanel());
+        bodyContainer.add(stadium.getInput());
 
         container.add(BorderLayout.CENTER, bodyContainer);
         container.add(BorderLayout.SOUTH, buttons);
 
     }
 
-
-
     public JPanel getContainer() {
         return container;
     }
 
-  
-
-    public JButton addButton(){
-        JButton buttonAdd = new JButton("Agregar Equipo");
+    public JButton addButton() {
+        JButton buttonAdd = new JButton("Agregar Partido");
         buttonAdd.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        String name = inputName.getText();
-                        String stadium = inputStadium.getText();
-                        if (name != null) {
-                            MySQLTeamAdapter mySQLTeamAdapter = new MySQLTeamAdapter();
-                            mySQLTeamAdapter.save(new Team(name, stadium));
-                            HandleErrors.showSuccessful("Se Guardo", "Nuevo equipo creado correctamente");
-                            Main.reload(Main.homeView());
-                        }else{
-                            HandleErrors.showError("Nombre incorrecto", "Ingresa un Nombre Valido");
-                        }
-                    } catch (Exception a) {
-                        HandleErrors.showError("Error", a.getMessage());
-                    }
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String local_team = localTeamSelect.getValue();
+                String visitor_team = visitorTeamSelect.getValue();
+                if (local_team.equals(visitor_team)) {
+                    HandleErrors.showError("ErrorTeam", "Error el equipo local no se puede enfrentar contra el mismo");
+                } else {
+                   new ServiceMatch().createMatch(local_team, visitor_team, match_date.getValue(), match_time.getTime(), stadium.valueTxt());
                 }
+            }
         });
         return buttonAdd;
     }
 
-
-    
-    
 }

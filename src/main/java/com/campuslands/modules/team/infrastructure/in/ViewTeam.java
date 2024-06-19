@@ -9,14 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
-import com.campuslands.Main;
-import com.campuslands.core.helpers.HandleErrors;
-import com.campuslands.modules.team.domain.models.Team;
-import com.campuslands.modules.team.infrastructure.out.MySQLTeamAdapter;
+
+import com.campuslands.core.components.Input;
+import com.campuslands.modules.team.application.ServiceTeam;
 
 
 public class ViewTeam{
@@ -27,22 +24,15 @@ public class ViewTeam{
     JButton backButton;
     JButton addButton;
 
-    JTextField inputName;
-    JTextField inputStadium;
+    Input inputName;
+    Input inputStadium;
 
     public ViewTeam(JButton buttonBack){
         container = new JPanel(new BorderLayout());
         bodyContainer = new JPanel(new GridLayout(0, 1));
 
-        inputName = new JTextField(30);
-        JPanel input_container_name = new JPanel(new FlowLayout());
-        input_container_name.add(new JLabel("Nombre del Equipo"));
-        input_container_name.add(inputName);
-
-        inputStadium = new JTextField(30);
-        JPanel input_container_stadium = new JPanel(new FlowLayout());
-        input_container_stadium.add(new JLabel("Nombre del Estadio"));
-        input_container_stadium.add(inputStadium);
+        inputName = new Input("Nombre del Equipo", 30);
+        inputStadium = new Input("Nombre del Estadio", 30);
 
         buttons = new JPanel(new FlowLayout());
         addButton = addButton();
@@ -51,8 +41,8 @@ public class ViewTeam{
         buttons.add(addButton);
 
 
-        bodyContainer.add(input_container_name);
-        bodyContainer.add(input_container_stadium);
+        bodyContainer.add(inputName.getInput());
+        bodyContainer.add(inputStadium.getInput());
 
         container.add(BorderLayout.CENTER, bodyContainer);
         container.add(BorderLayout.SOUTH, buttons);
@@ -72,20 +62,7 @@ public class ViewTeam{
         buttonAdd.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    try {
-                        String name = inputName.getText();
-                        String stadium = inputStadium.getText();
-                        if (name != null) {
-                            MySQLTeamAdapter mySQLTeamAdapter = new MySQLTeamAdapter();
-                            mySQLTeamAdapter.save(new Team(name, stadium));
-                            HandleErrors.showSuccessful("Se Guardo", "Nuevo equipo creado correctamente");
-                            Main.reload(Main.homeView());
-                        }else{
-                            HandleErrors.showError("Nombre incorrecto", "Ingresa un Nombre Valido");
-                        }
-                    } catch (Exception a) {
-                        HandleErrors.showError("Error", a.getMessage());
-                    }
+                   new ServiceTeam().createTeam(inputName.valueTxt(), inputStadium.valueTxt());
                 }
         });
         return buttonAdd;
